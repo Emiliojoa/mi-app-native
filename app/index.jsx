@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import '~/global.css';
 
 export default function AuthScreen() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function AuthScreen() {
     const user = users.find(u => u.username === username && u.password === password);
     if (user) {
       Alert.alert('Éxito', `Bienvenido ${user.username}`);
-      router.replace('/auth'); 
+      router.replace('/auth');
       console.log(`${user.username} no se quiere ir al login`);
     } else {
       Alert.alert('Error', 'Credenciales incorrectas');
