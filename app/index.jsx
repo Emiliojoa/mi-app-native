@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
-interface User {
-  username: string;
-  password: string;
-}
-
-const App = () => {
-  const [users, setUsers] = useState<User[]>([]); 
-  const [isLogin, setIsLogin] = useState(true); 
+export default function AuthScreen() {
+  const router = useRouter();
+  const [isLogin, setIsLogin] = useState(true);
+  const [users, setUsers] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,7 +18,7 @@ const App = () => {
 
     const newUser = { username, password };
     setUsers([...users, newUser]);
-    Alert.alert('Éxito', 'Usuario registrado');
+    Alert.alert('Registrado', 'Usuario registrado con éxito');
     setUsername('');
     setPassword('');
     setIsLogin(true);
@@ -31,6 +28,8 @@ const App = () => {
     const user = users.find(u => u.username === username && u.password === password);
     if (user) {
       Alert.alert('Éxito', `Bienvenido ${user.username}`);
+      router.replace('/auth'); 
+      console.log(`${user.username} no se quiere ir al login`);
     } else {
       Alert.alert('Error', 'Credenciales incorrectas');
     }
@@ -39,14 +38,13 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Usuario"
         value={username}
         onChangeText={setUsername}
       />
-
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
@@ -66,14 +64,11 @@ const App = () => {
       </Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', padding: 20 },
   title: { fontSize: 24, textAlign: 'center', marginBottom: 20 },
   input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10, borderRadius: 5 },
-  toggle: { color: 'blue', marginTop: 20, textAlign: 'center' }
+  toggle: { color: 'blue', marginTop: 20, textAlign: 'center' },
 });
-
-export default App;
-
