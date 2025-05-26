@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import '~/global.css';
+import { Alert, Button, ImageBackground, Text, TextInput, View } from 'react-native';
 
 export default function AuthScreen() {
   const router = useRouter();
@@ -16,7 +15,6 @@ export default function AuthScreen() {
       Alert.alert('Error', 'El usuario ya existe');
       return;
     }
-
     const newUser = { username, password };
     setUsers([...users, newUser]);
     Alert.alert('Registrado', 'Usuario registrado con éxito');
@@ -26,7 +24,7 @@ export default function AuthScreen() {
   };
 
   const handleLogin = () => {
-    const user = users.find(u => u.username === username && u.password === password);
+    const user = users.find(u => u.username === username && u.password === password)
     if (user) {
       Alert.alert('Éxito', `Bienvenido ${user.username}`);
       router.replace('/auth');
@@ -37,39 +35,35 @@ export default function AuthScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Usuario"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      {isLogin ? (
-        <Button title="Ingresar" onPress={handleLogin} />
-      ) : (
-        <Button title="Registrar" onPress={handleRegister} />
-      )}
-
-      <Text style={styles.toggle} onPress={() => setIsLogin(!isLogin)}>
-        {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
-      </Text>
-    </View>
+    <ImageBackground
+      source={{ uri: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" }}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <View className="flex-1 justify-center items-center bg-yellow-100/60">
+        <Text className="p-4 font-bold">{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</Text>
+        <TextInput
+          className="border border-black p-2 rounded mb-2 h-10 w-60 font-bold"
+          placeholder="Usuario"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          className="border-2 border-black p-2 rounded mb-2 h-10 w-60 font-bold"
+          placeholder="Contraseña"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        {isLogin ? (
+          <Button title="Ingresar" onPress={handleLogin} />
+        ) : (
+          <Button title="Registrar" onPress={handleRegister} />
+        )}
+        <Text className="p-4 font-bold" onPress={() => setIsLogin(!isLogin)}>
+          {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
+        </Text>
+      </View>
+    </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 24, textAlign: 'center', marginBottom: 20 },
-  input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10, borderRadius: 5 },
-  toggle: { color: 'blue', marginTop: 20, textAlign: 'center' },
-});

@@ -1,12 +1,11 @@
-import { StyleSheet, Text } from 'react-native';
-import { ScrollView } from 'react-native-web';
-import '~/global.css';
+import { ScrollView, StyleSheet, Text } from 'react-native';
+
 
 export default function HomePage() {
-
   return (
     <ScrollView style={{ flex: 1, padding: 20 }} contentContainerStyle={styles.container}>
-      <Text className="text-center text-gray-500 mt-">🏠 Pantalla principal tras el login</Text>
+      <Text className>🏠 Pantalla principal tras el login</Text>
+
     </ScrollView>
   );
 }
