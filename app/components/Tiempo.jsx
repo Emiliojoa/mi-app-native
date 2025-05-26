@@ -2,11 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 
 
 export default function Tiempo({tiempo}) {
-    const minutos =`${Math.floor(tiempo / 60)}.toString().padStart(2, '0')`;
+    const minutos =`${Math.floor(tiempo / 60).toString().padStart(2, '0')}:${(tiempo % 60).toString().padStart(2, '0')}`
   return (
     <View style={styles.container}>
         <Text style={styles.tiempo}>
-        {tiempo}
+        {minutos}
         </Text>
         </View>
   )
