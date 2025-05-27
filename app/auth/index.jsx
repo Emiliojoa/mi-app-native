@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text } from 'react-native';
 export default function HomePage() {
   return (
     <ScrollView style={{ flex: 1, padding: 20 }} contentContainerStyle={styles.container}>
-      <Text className>🏠 Pantalla principal tras el login</Text>
+      <Text className="">🏠 Pantalla principal tras el login</Text>
 
     </ScrollView>
   );

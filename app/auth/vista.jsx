@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import "~/global.css";
 import Pomo from '../components/Pomo';
 import Tiempo from '../components/Tiempo';
 
@@ -21,6 +22,7 @@ useEffect(()=>{
     if(activo){
         intervalo=setInterval(()=>{
             setTiempo(tiempo-1)}
+            
             , 1000)
         
     }else{
