@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     fontWeight: 600,
+    
   },
   link: {
     marginTop: 15,
