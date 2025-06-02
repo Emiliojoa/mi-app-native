@@ -21,7 +21,12 @@ export default function TabLayout() {
             iconName = focused ? 'grid' : 'grid-outline';
           } else if (route.name === 'scroll') {
             iconName = focused ? 'list' : 'list-outline';
+          }else if (route.name === '') {
+            iconName = focused ? 'alert' : 'alert-outline';
+          }else if(route.name === 'publicaciones'){
+            iconName = focused ? 'newspaper' : 'newspaper-outline';
           }
+
 
           return (
             <View style={styles.iconContainer}>
@@ -51,6 +56,13 @@ export default function TabLayout() {
         options={{
           title: 'Revisión',
           tabBarLabel: 'Revisión',
+        }}
+      />
+      <Tabs.Screen
+        name="publicaciones"
+        options={{
+          title: 'index',
+          tabBarLabel: 'Publicaciones',
         }}
       />
     </Tabs>

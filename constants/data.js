@@ -8,6 +8,7 @@ export const comentarios = Array.from({length:15}, (_, i) => ({
         day: 'numeric'
     }),
     comentarios: Array.from({length:4}, (_,j)=>({
+        id: `${i + 1}-${j + 1}`,
         texto: `Comentario ${j + 1} de la publicación número ${i + 1}`,
         autor: `Usuario ${j + 1}`,
     }))
