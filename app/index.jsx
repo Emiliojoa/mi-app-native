@@ -1,69 +1,118 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Alert, Button, ImageBackground, Text, TextInput, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function AuthScreen() {
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState(true);
-  const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [photo, setPhoto] = useState(null);
+  const cameraRef = useRef(null);
+  const [permission, requestPermission] = useCameraPermissions();
 
-  const handleRegister = () => {
-    const exists = users.find(u => u.username === username);
-    if (exists) {
-      Alert.alert('Error', 'El usuario ya existe');
-      return;
-    }
-    const newUser = { username, password };
-    setUsers([...users, newUser]);
-    Alert.alert('Registrado', 'Usuario registrado con éxito');
-    setUsername('');
-    setPassword('');
-    setIsLogin(true);
-  };
+  useEffect(() => {
+    (async () => {
+      const auth = await AsyncStorage.getItem('authenticated');
+      if (auth === 'true') {
+        setIsAuthenticated(true);
+        router.replace('/auth');
+      }
+      if (!permission?.granted) {
+        await requestPermission();
+      }
+    })();
+  }, []);
 
-  const handleLogin = () => {
-    const user = users.find(u => u.username === username && u.password === password)
-    if (user) {
-      Alert.alert('Éxito', `Bienvenido ${user.username}`);
+  const handleLoginWithPhoto = async () => {
+    if (photo) {
+      await AsyncStorage.setItem('authenticated', 'true');
+      setIsAuthenticated(true);
+      Alert.alert('Éxito', 'Autenticado con foto');
       router.replace('/auth');
-      console.log(`${user.username} no se quiere ir al login`);
     } else {
-      Alert.alert('Error', 'Credenciales incorrectas');
+      Alert.alert('Error', 'Toma una foto para autenticarte');
     }
   };
+
+  const tomarFoto = async () => {
+    if (cameraRef.current) {
+      const foto = await cameraRef.current.takePictureAsync();
+      setPhoto(foto.uri);
+    }
+  };
+
+  if (!permission) {
+    return (
+      <View style={styles.center}>
+        <Text>Solicitando permisos de cámara...</Text>
+      </View>
+    );
+  }
+  if (!permission.granted) {
+    return (
+      <View style={styles.center}>
+        <Text>No se tiene acceso a la cámara.</Text>
+        <TouchableOpacity style={styles.button} onPress={requestPermission}>
+          <Text style={styles.buttonText}>Permitir cámara</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <ImageBackground
-      source={{ uri: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" }}
+      source={{
+        uri: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+      }}
       style={{ flex: 1 }}
       resizeMode="cover"
     >
-      <View className="flex-1 justify-center items-center bg-yellow-100/60">
-        <Text className="p-4 font-bold">{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</Text>
-        <TextInput
-          className="border border-black p-2 rounded mb-2 h-10 w-60 font-bold"
-          placeholder="Usuario"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput
-          className="border-2 border-black p-2 rounded mb-2 h-10 w-60 font-bold"
-          placeholder="Contraseña"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        {isLogin ? (
-          <Button title="Ingresar" onPress={handleLogin} />
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Autenticación con Cámara</Text>
+        {!photo ? (
+          <>
+            <CameraView
+              style={styles.camera}
+              ref={cameraRef}
+              facing="front"
+            />
+            <TouchableOpacity style={styles.button} onPress={tomarFoto}>
+              <Text style={styles.buttonText}>Tomar Foto para Login</Text>
+            </TouchableOpacity>
+          </>
         ) : (
-          <Button title="Registrar" onPress={handleRegister} />
+          <>
+            <Image source={{ uri: photo }} style={styles.preview} />
+            <TouchableOpacity style={styles.button} onPress={handleLoginWithPhoto}>
+              <Text style={styles.buttonText}>Ingresar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setPhoto(null)}>
+              <Text style={styles.buttonText}>Reintentar</Text>
+            </TouchableOpacity>
+          </>
         )}
-        <Text className="p-4 font-bold" onPress={() => setIsLogin(!isLogin)}>
-          {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
-        </Text>
       </View>
     </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,200,0.6)',
+  },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
+  camera: { width: 300, height: 400, borderRadius: 10 },
+  button: {
+    marginTop: 20,
+    backgroundColor: '#007bff',
+    padding: 15,
+    borderRadius: 8,
+  },
+  buttonText: { color: '#fff', fontWeight: 'bold' },
+  preview: { width: 300, height: 400, borderRadius: 10 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+});

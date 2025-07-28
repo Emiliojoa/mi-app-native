@@ -19,6 +19,11 @@ export default function PublicacionDetalle() {
 
   return (
     <>
+     <View>
+                  <TouchableOpacity onPress={() => router.back()}>
+                      <Text className="text-2xl font-bold">{"<"}</Text>
+                  </TouchableOpacity>
+        </View>
       <Stack.Screen options={{ title: publicacion.titulo }} />
       <ScrollView className="flex-1 p-4 bg-white">
         <Text className="text-2xl font-bold mb-4">{publicacion.titulo}</Text>

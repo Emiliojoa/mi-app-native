@@ -1,6 +1,6 @@
 import { comentarios } from '@/constants/data';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ComentarioDetalle(){
     const { idPublicacion, idComentario } = useLocalSearchParams();
@@ -21,6 +21,11 @@ export default function ComentarioDetalle(){
     }
     return (
         <>
+         <View>
+                  <TouchableOpacity onPress={() => router.back()}>
+                      <Text className="text-2xl font-bold">{"<"}</Text>
+                  </TouchableOpacity>
+        </View>
             <Stack.Screen options={{ title: `Comentario de ${publicacion.titulo}` }} />
             <ScrollView className="flex-1 p-4 bg-white">
                 <Text className="text-2xl font-bold mb-4">{publicacion.titulo}</Text>

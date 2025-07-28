@@ -1,17 +1,37 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: {
+          backgroundColor: 'black',
+          borderTopWidth: 0,
+          elevation: 10,
+          height: 100,
+        },
         tabBarActiveTintColor: '#ffffff',
         tabBarInactiveTintColor: '#a0a0a0',
-        tabBarLabelStyle: styles.tabBarLabel,
-        tabBarItemStyle: styles.tabBarItem,
+        tabBarLabel: ({ focused, color }) => (
+          <Text
+            className={`text-xs font-semibold mb-1 ${focused ? 'text-white' : 'text-gray-400'}`}
+          >
+            {route.name === 'index'
+              ? 'Home'
+              : route.name === 'vista'
+              ? 'Vista'
+              : route.name === 'scroll'
+              ? 'Revisión'
+              : route.name === 'publicaciones'
+              ? 'Publicaciones'
+              : route.name === 'logout'
+              ? 'Logout'
+              : ''}
+          </Text>
+        ),
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -21,17 +41,20 @@ export default function TabLayout() {
             iconName = focused ? 'grid' : 'grid-outline';
           } else if (route.name === 'scroll') {
             iconName = focused ? 'list' : 'list-outline';
-          }else if (route.name === '') {
-            iconName = focused ? 'alert' : 'alert-outline';
-          }else if(route.name === 'publicaciones'){
+          } else if (route.name === 'publicaciones') {
             iconName = focused ? 'newspaper' : 'newspaper-outline';
+          } else if (route.name === 'logout') {
+            iconName = focused ? 'log-out' : 'log-out-outline';
+          } else {
+            iconName = focused ? 'alert' : 'alert-outline';
           }
 
-
           return (
-            <View style={styles.iconContainer}>
+            <View className="items-center justify-center w-full">
               <Ionicons name={iconName} size={size} color={color} />
-              {focused && <View style={styles.activeIndicator} />}
+              {focused && (
+                <View className="bg-white rounded h-1 w-5 mt-1" />
+              )}
             </View>
           );
         },
@@ -61,41 +84,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="publicaciones"
         options={{
-          title: 'index',
+          title: 'Publicaciones',
           tabBarLabel: 'Publicaciones',
+        }}
+      />
+      <Tabs.Screen
+        name="logout"
+        options={{
+          title: 'Logout',
+          tabBarLabel: 'Logout',
         }}
       />
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: '#333',
-    borderTopWidth: 0,
-    elevation: 8,
-    height: 60,
-    paddingBottom: 5,
-    paddingTop: 5,
-  },
-  tabBarLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginBottom: 3,
-  },
-  tabBarItem: {
-    paddingTop: 5,
-  },
-  iconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  activeIndicator: {
-    backgroundColor: '#ffffff',
-    borderRadius: 2,
-    height: 4,
-    marginTop: 4,
-    width: 20,
-  },
-});
