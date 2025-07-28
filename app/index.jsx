@@ -10,6 +10,7 @@ export default function AuthScreen() {
   const [photo, setPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [permission, requestPermission] = useCameraPermissions();
+  const [authMethod, setAuthMethod] = useState(null); // null, 'facial', 'cuenta'
 
   useEffect(() => {
     (async () => {
@@ -60,6 +61,35 @@ export default function AuthScreen() {
     );
   }
 
+  // Pantalla de selección de método de autenticación
+  if (!authMethod) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.title}>¿Cómo quieres iniciar sesión?</Text>
+        <TouchableOpacity style={styles.button} onPress={() => setAuthMethod('cuenta')}>
+          <Text style={styles.buttonText}>Iniciar sesión con cuenta</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => setAuthMethod('facial')}>
+          <Text style={styles.buttonText}>Iniciar sesión con datos faciales</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // Aquí iría tu formulario tradicional de login
+  if (authMethod === 'cuenta') {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.title}>Login tradicional</Text>
+        {/* Aquí puedes poner tu formulario de usuario y contraseña */}
+        <TouchableOpacity style={styles.button} onPress={() => setAuthMethod(null)}>
+          <Text style={styles.buttonText}>Volver</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // Autenticación facial
   return (
     <ImageBackground
       source={{
@@ -80,6 +110,9 @@ export default function AuthScreen() {
             <TouchableOpacity style={styles.button} onPress={tomarFoto}>
               <Text style={styles.buttonText}>Tomar Foto para Login</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setAuthMethod(null)}>
+              <Text style={styles.buttonText}>Volver</Text>
+            </TouchableOpacity>
           </>
         ) : (
           <>
@@ -89,6 +122,9 @@ export default function AuthScreen() {
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => setPhoto(null)}>
               <Text style={styles.buttonText}>Reintentar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => setAuthMethod(null)}>
+              <Text style={styles.buttonText}>Volver</Text>
             </TouchableOpacity>
           </>
         )}
