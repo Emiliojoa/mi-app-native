@@ -79,15 +79,20 @@ export default function AuthScreen() {
   // Aquí iría tu formulario tradicional de login
   if (authMethod === 'cuenta') {
     return (
-      <View style={styles.center}>
-        <Text style={styles.title}>Login tradicional</Text>
-        {/* Aquí puedes poner tu formulario de usuario y contraseña */}
-        <TouchableOpacity style={styles.button} onPress={() => setAuthMethod(null)}>
-          <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={() => router.push("/")}>
+        <View style={styles.center}>
+          <Text style={styles.title}>Login tradicional</Text>
+          {/* Aquí puedes poner tu formulario de usuario y contraseña */}
+          <TouchableOpacity style={styles.button} onPress={() => setAuthMethod(null)}>
+            <Text style={styles.buttonText}>Volver</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
     );
   }
+
+  // Autenticación facial
+
 
   // Autenticación facial
   return (
