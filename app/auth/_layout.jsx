@@ -27,6 +27,8 @@ export default function TabLayout() {
               ? 'Revisión'
               : route.name === 'publicaciones'
               ? 'Publicaciones'
+              : route.name === 'productos'
+              ? 'Productos'
               : route.name === 'logout'
               ? 'Logout'
               : ''}
@@ -43,6 +45,8 @@ export default function TabLayout() {
             iconName = focused ? 'list' : 'list-outline';
           } else if (route.name === 'publicaciones') {
             iconName = focused ? 'newspaper' : 'newspaper-outline';
+          } else if (route.name === 'productos') {
+            iconName = focused ? 'cube' : 'cube-outline';
           } else if (route.name === 'logout') {
             iconName = focused ? 'log-out' : 'log-out-outline';
           } else {
@@ -86,6 +90,13 @@ export default function TabLayout() {
         options={{
           title: 'Publicaciones',
           tabBarLabel: 'Publicaciones',
+        }}
+      />
+      <Tabs.Screen
+        name="productos"
+        options={{
+          title: 'Productos',
+          tabBarLabel: 'Productos',
         }}
       />
       <Tabs.Screen
